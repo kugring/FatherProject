@@ -1,8 +1,6 @@
 import win32com.client as win32
 
-작성년도 = "2024"
-환율 = "1,289"
-공사명 = "정동마을 위쪽 배수로 정비공사"
+공사명 = "관평마을 주차장"
 공사장소 = "순창군 복흥면 정산리 582번지 일원"
 행정구역 = "복흥면"
 배수공 = "벤치플륨관설치 0.4*0.4  L=24.0m"
@@ -21,27 +19,6 @@ hwp.XHwpWindows.Item(0).Visible = True
 
 # 문서 열기
 hwp.Open(file_path)
-
-hwp.HAction.GetDefault("AllReplace", hwp.HParameterSet.HFindReplace.HSet)
-option = hwp.HParameterSet.HFindReplace
-option.FindString = "(년도날짜n)"
-option.ReplaceString = "\n".join(작성년도)
-option.IgnoreMessage = 1
-hwp.HAction.Execute("AllReplace", hwp.HParameterSet.HFindReplace.HSet)
-
-hwp.HAction.GetDefault("AllReplace", hwp.HParameterSet.HFindReplace.HSet)
-option = hwp.HParameterSet.HFindReplace
-option.FindString = "(년도날짜)"
-option.ReplaceString = 작성년도
-option.IgnoreMessage = 1
-hwp.HAction.Execute("AllReplace", hwp.HParameterSet.HFindReplace.HSet)
-
-hwp.HAction.GetDefault("AllReplace", hwp.HParameterSet.HFindReplace.HSet)
-option = hwp.HParameterSet.HFindReplace
-option.FindString = "(환율)"
-option.ReplaceString = 환율
-option.IgnoreMessage = 1
-hwp.HAction.Execute("AllReplace", hwp.HParameterSet.HFindReplace.HSet)
 
 hwp.HAction.GetDefault("AllReplace", hwp.HParameterSet.HFindReplace.HSet)
 option = hwp.HParameterSet.HFindReplace

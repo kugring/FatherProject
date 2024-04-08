@@ -1,5 +1,6 @@
 from openpyxl import load_workbook
 import os
+import shutil
 
 '''
 
@@ -14,7 +15,9 @@ import os
 folder_path = r"C:\Users\gram\Desktop\7. 복흥면\4. 율평마을 농로 선형개선공사 1000"
 
 
-def 갑지엑셀_생성(folder_path):
+def 갑지_공사명_공사위치(folder_path):
+    print("---------------------------------------------------------------")
+
     # 엑셀 파일에서 데이터 가져오기
     def get_data_from_excel(file_path, sheet_name, cell):
         wb = load_workbook(filename=file_path)
@@ -32,7 +35,6 @@ def 갑지엑셀_생성(folder_path):
         wb.close()
 
     # 폴더 내의 모든 파일을 확인하여 "수량 -"이라는 단어가 들어가는 엑셀 파일을 찾음
-    found_file = None
     for file in os.listdir(folder_path):
         if file.endswith('.xlsx') and "수량-" in file:
             quantity_file_path = os.path.join(folder_path, file)
@@ -44,18 +46,27 @@ def 갑지엑셀_생성(folder_path):
         print("폴더 내에 '수량 -'이라는 단어가 들어가는 엑셀 파일이 없습니다.")
         exit()
 
-    if found_file:
-        print(f"찾은 파일명: {공사명}")
+    # 폴더 내의 모든 파일을 확인하여 "갑지 -"이라는 단어가 들어가는 엑셀 파일을 찾음
+    for file in os.listdir(folder_path):
+        if file.endswith('.xlsx') and "갑지-" in file:
+            title_excel_path = os.path.join(folder_path, file)
+            break
+    else:
+        source_file_path = r"C:\Users\gram\Desktop\갑지- (견본).xlsx"
 
-    title_excel_path = os.path.join(folder_path, '2.갑지- 복흑면23-4.xlsx')
+        # 목표 파일 경로 생성
+        target_file_path = os.path.join(folder_path, os.path.basename(source_file_path))
+
+        # 파일 복사
+        shutil.copy(source_file_path, target_file_path)
+        print("폴더 내에 '갑지'파일이 없습니다. 새로 생성합니다.")
 
     # 수량 파일에서 데이터 가져오기
     공사위치 = get_data_from_excel(quantity_file_path, '용지조서', 'B2')
-
     # 갑지 파일에 공사위치 데이터 입력하기
     set_data_to_excel(title_excel_path, '사업개요', 'C2', 공사위치)
-
+    print(f'공사위치:[{공사위치}] - (입력완료)')
     # 갑지 파일에 공사명 데이터 입력하기
     set_data_to_excel(title_excel_path, '사업개요', 'C1', 공사명)
-
-    print("데이터 입력이 완료되었습니다.")
+    print(f'공사명:[{공사명}] - (입력완료)')
+    print("---------------------------------------------------------------")

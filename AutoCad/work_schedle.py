@@ -6,7 +6,7 @@ import os
 folder_path = r'C:\Users\gram\Desktop\7. 복흥면\4. 율평마을 농로 선형개선공사 1000'
 
 
-def 예정공정표(folder_path):
+def 갑지_예정공정표(folder_path):
     '''
      *주의사항*
         - 비용합계는 'U열"에 있을것!
@@ -50,11 +50,16 @@ def 예정공정표(folder_path):
     # 엑셀 파일 닫기
     workbook.release_resources()
 
-    # 현재 스크립트 파일의 경로
-    script_directory = os.path.dirname(os.path.abspath(ESTX_file_path))
-
-    # 견본이 되는 갑지-엑셀파일의 위치
-    title_excel_path = os.path.join(script_directory, '2.갑지- 복흑면23-4.xlsx')
+    # 폴더 내의 모든 파일을 확인하여 "수량 -"이라는 단어가 들어가는 엑셀 파일을 찾음
+    for file in os.listdir(folder_path):
+        if file.endswith('.xlsx') and "갑지-" in file:
+            title_excel_path = os.path.join(folder_path, file)
+            break
+    else:
+        # 현재 스크립트 파일의 경로
+        script_directory = os.path.dirname(os.path.abspath(ESTX_file_path))
+        title_excel_path = os.path.join(script_directory, f'갑지-{file_name}.xlsx')
+        print("폴더 내에 '갑지'파일이 없습니다. 새로 생성합니다.")
 
     # 엑셀 파일에 데이터 입력하기
     def set_data_to_excel(file_path, sheet_name, cell, data):
@@ -77,11 +82,5 @@ def 예정공정표(folder_path):
         # 변수명을 가져와서 엑셀 파일에 데이터를 입력합니다.
         set_data_to_excel(title_excel_path, '예정공정.동원인원', f'B{index}', 공사명들[idx])
 
-    print("데이터 입력이 완료되었습니다.")
-
-
-# estx 파일의 경로
-ESTX_file_path = r'C:\Users\gram\Desktop\7. 복흥면\4. 율평마을 농로 선형개선공사 1000\율평마을 농로 선형개선공사.xls'
-
-# 함수 호출
-process_excel_data(ESTX_file_path)
+    print("예정공정표 출력완료!")
+    print("---------------------------------------------------------------")
